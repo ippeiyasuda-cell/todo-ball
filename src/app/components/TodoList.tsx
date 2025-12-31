@@ -35,33 +35,37 @@ function TodoItem({
     }
   };
 
-  const starCount = (index % 7) + 1;
+  // 季節の花モチーフ
+  const flowers = ["桜", "梅", "菊", "藤", "椿", "牡丹", "蓮"];
+  const flowerIndex = index % flowers.length;
 
   return (
     <li
-      className="flex items-center gap-3 p-4 rounded-lg group transition-all hover:scale-[1.02]"
+      className="flex items-center gap-3 p-4 rounded-lg group transition-all hover:translate-y-[-2px]"
       style={{
         background: todo.completed
-          ? "linear-gradient(135deg, #81c784 0%, #4caf50 100%)"
-          : "linear-gradient(135deg, #fff 0%, #fff3e0 100%)",
-        border: "4px solid #000",
-        boxShadow: "5px 5px 0 #000",
+          ? "linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)"
+          : "linear-gradient(135deg, #fff 0%, #f8f4eb 100%)",
+        border: "1px solid #c9a84c",
+        boxShadow: "2px 2px 8px rgba(0,0,0,0.1)",
       }}
     >
-      {/* ドラゴンボール風チェックボックス */}
+      {/* 和風チェックボタン（花モチーフ） */}
       <button
         onClick={() => onToggle(todo.id)}
-        className="w-10 h-10 rounded-full flex items-center justify-center transition-transform hover:scale-110 flex-shrink-0"
+        className="w-12 h-12 rounded-full flex items-center justify-center transition-transform hover:scale-110 flex-shrink-0"
         style={{
           background: todo.completed
-            ? "linear-gradient(135deg, #ffd700 0%, #ff9800 100%)"
-            : "linear-gradient(135deg, #ffeb3b 0%, #ff9800 50%, #ff6b00 100%)",
-          border: "3px solid #000",
-          boxShadow: todo.completed ? "0 0 15px #ffd700" : "2px 2px 0 #000",
+            ? "linear-gradient(135deg, #c9a84c 0%, #a67c00 100%)"
+            : "linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%)",
+          border: todo.completed ? "2px solid #a67c00" : "2px solid #d14836",
+          boxShadow: todo.completed
+            ? "0 0 10px rgba(201, 168, 76, 0.5)"
+            : "inset 0 0 10px rgba(255,255,255,0.5)",
         }}
       >
-        <span className="text-red-700 font-bold text-sm">
-          {todo.completed ? "✓" : starCount}
+        <span className="text-lg" style={{ color: todo.completed ? "#fff" : "#d14836" }}>
+          {todo.completed ? "済" : flowers[flowerIndex]}
         </span>
       </button>
 
@@ -74,39 +78,39 @@ function TodoItem({
           onKeyDown={handleKeyDown}
           className="flex-1 px-3 py-2 text-lg rounded"
           style={{
-            border: "3px solid #000",
-            fontFamily: "'Bangers', sans-serif",
+            border: "1px solid #c9a84c",
+            fontFamily: "'Noto Serif JP', serif",
+            background: "#fff",
           }}
           autoFocus
         />
       ) : (
         <span
           onClick={() => setIsEditing(true)}
-          className={`flex-1 cursor-pointer text-xl ${
-            todo.completed ? "line-through text-gray-700" : "text-gray-900"
+          className={`flex-1 cursor-pointer text-lg ${
+            todo.completed ? "line-through text-gray-500" : "text-gray-800"
           }`}
           style={{
-            fontFamily: "'Bangers', sans-serif",
-            letterSpacing: "0.05em",
+            fontFamily: "'Noto Serif JP', serif",
           }}
         >
           {todo.text}
         </span>
       )}
 
-      {/* かめはめ波風削除ボタン */}
+      {/* 削除ボタン */}
       <button
         onClick={() => onDelete(todo.id)}
-        className="opacity-0 group-hover:opacity-100 px-3 py-2 rounded-lg transition-all hover:scale-110"
+        className="opacity-0 group-hover:opacity-100 px-3 py-2 rounded transition-all hover:scale-105"
         style={{
-          background: "linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%)",
-          border: "3px solid #000",
-          boxShadow: "3px 3px 0 #000",
+          background: "linear-gradient(135deg, #264c6e 0%, #1a3a54 100%)",
+          border: "1px solid #1a3a54",
           color: "#fff",
-          fontFamily: "'Bangers', sans-serif",
+          fontFamily: "'Noto Serif JP', serif",
+          fontSize: "0.9rem",
         }}
       >
-        消滅！
+        消す
       </button>
     </li>
   );
@@ -130,28 +134,30 @@ export default function TodoList() {
     return (
       <div className="flex flex-col justify-center items-center min-h-[200px]">
         <div
-          className="w-16 h-16 rounded-full"
+          className="w-16 h-16 rounded-full flex items-center justify-center"
           style={{
-            background: "linear-gradient(135deg, #ffeb3b 0%, #ff6b00 100%)",
-            border: "4px solid #000",
-            animation: "power-up 0.5s ease-in-out infinite",
-          }}
-        />
-        <p
-          className="mt-4 text-xl"
-          style={{
-            color: "#ff6b00",
-            textShadow: "2px 2px 0 #000",
+            background: "linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%)",
+            border: "2px solid #d14836",
+            animation: "float 1.5s ease-in-out infinite",
           }}
         >
-          気を集中中...
+          <span className="text-2xl">桜</span>
+        </div>
+        <p
+          className="mt-4 text-lg"
+          style={{
+            color: "#264c6e",
+            fontFamily: "'Noto Serif JP', serif",
+          }}
+        >
+          読み込み中...
         </p>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div className="w-full max-w-xl mx-auto relative z-10">
       {/* 入力フォーム */}
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="flex gap-3">
@@ -159,13 +165,13 @@ export default function TodoList() {
             type="text"
             value={newTodoText}
             onChange={(e) => setNewTodoText(e.target.value)}
-            placeholder="新しい修行を入力..."
-            className="flex-1 px-4 py-3 text-xl rounded-lg"
+            placeholder="新しい予定を書く..."
+            className="flex-1 px-4 py-3 text-lg rounded-lg"
             style={{
-              border: "4px solid #000",
-              boxShadow: "5px 5px 0 #000",
-              fontFamily: "'Bangers', sans-serif",
-              letterSpacing: "0.05em",
+              border: "1px solid #c9a84c",
+              boxShadow: "2px 2px 8px rgba(0,0,0,0.1)",
+              fontFamily: "'Noto Serif JP', serif",
+              background: "#fff",
             }}
           />
           <button
@@ -173,41 +179,39 @@ export default function TodoList() {
             disabled={!newTodoText.trim()}
             className="px-6 py-3 rounded-lg transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              background: "linear-gradient(135deg, #ff6b00 0%, #e53935 100%)",
-              border: "4px solid #000",
-              boxShadow: "5px 5px 0 #000",
+              background: "linear-gradient(135deg, #d14836 0%, #b71c1c 100%)",
+              border: "1px solid #b71c1c",
+              boxShadow: "2px 2px 8px rgba(0,0,0,0.15)",
               color: "#fff",
-              fontFamily: "'Bangers', sans-serif",
-              fontSize: "1.25rem",
-              letterSpacing: "0.1em",
+              fontFamily: "'Noto Serif JP', serif",
+              fontSize: "1rem",
             }}
           >
-            追加だ！
+            追加
           </button>
         </div>
       </form>
 
-      {/* 戦闘力（進捗）表示 */}
+      {/* 進捗表示 */}
       {totalCount > 0 && (
         <div
           className="mb-4 p-3 rounded-lg text-center"
           style={{
-            background: "linear-gradient(135deg, #1e88e5 0%, #1565c0 100%)",
-            border: "3px solid #000",
-            boxShadow: "4px 4px 0 #000",
+            background: "linear-gradient(135deg, #264c6e 0%, #1a3a54 100%)",
+            border: "1px solid #1a3a54",
+            boxShadow: "2px 2px 8px rgba(0,0,0,0.15)",
           }}
         >
           <span
-            className="text-xl text-white"
+            className="text-lg text-white"
             style={{
-              fontFamily: "'Bangers', sans-serif",
-              textShadow: "2px 2px 0 #000",
+              fontFamily: "'Noto Serif JP', serif",
             }}
           >
-            戦闘力: {completedCount} / {totalCount} 達成！
+            進捗: {completedCount} / {totalCount} 完了
           </span>
           {completedCount === totalCount && totalCount > 0 && (
-            <span className="ml-2 animate-pulse">🐉</span>
+            <span className="ml-2">御見事!</span>
           )}
         </div>
       )}
@@ -216,36 +220,36 @@ export default function TodoList() {
         <div
           className="text-center py-12 rounded-lg"
           style={{
-            background: "rgba(255,255,255,0.8)",
-            border: "4px solid #000",
-            boxShadow: "5px 5px 0 #000",
+            background: "rgba(255,255,255,0.9)",
+            border: "1px solid #c9a84c",
+            boxShadow: "2px 2px 8px rgba(0,0,0,0.1)",
           }}
         >
           <div
-            className="text-6xl mb-4"
+            className="text-5xl mb-4"
             style={{
-              animation: "power-up 2s ease-in-out infinite",
+              animation: "float 2s ease-in-out infinite",
             }}
           >
-            🐉
+            🌸
           </div>
           <p
-            className="text-2xl"
+            className="text-xl"
             style={{
-              color: "#ff6b00",
-              textShadow: "2px 2px 0 #000",
-              fontFamily: "'Bangers', sans-serif",
+              color: "#d14836",
+              fontFamily: "'Noto Serif JP', serif",
             }}
           >
-            修行が必要だ！
+            予定がありません
           </p>
           <p
-            className="text-lg mt-2"
+            className="text-base mt-2"
             style={{
-              fontFamily: "'Bangers', sans-serif",
+              fontFamily: "'Noto Serif JP', serif",
+              color: "#666",
             }}
           >
-            上のフォームからタスクを追加しろ！
+            上のフォームから追加してください
           </p>
         </div>
       ) : (
